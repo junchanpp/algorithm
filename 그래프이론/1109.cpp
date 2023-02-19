@@ -1,6 +1,6 @@
 //2023-02-17 11:53:10 start
 //2023-02-17 12:31:37 휴식
-//2023-02-17 12:39:37 다시 시작
+//2023-02-17 16:52:17 다시 시작
 //실패
 
 #include <iostream>
@@ -51,7 +51,7 @@ int main(){
                         int newX = dxList[i]+x;
                         if(newY <0 || newY > m-1 || newX < 0 || newX > n-1)continue;
                         if(visited[newY][newX] == 0 && map[newY][newX] == 0){
-                            visited[y][x] = 1;
+                            visited[newY][newX] = 1;
                             land.push_back(make_pair(newX,newY));
                         }
                     }
@@ -75,7 +75,7 @@ int main(){
         register deque<pair<int, int> > newLand;
 
         for(int i =0 ; i< land.size(); i++) {
-            newLand.push_back(land.at(i));
+            newLand.push_back(land[i]);
         }
 
         while(!land.empty() && !isExit){
@@ -87,7 +87,7 @@ int main(){
             for(int i = 0; i <4; i++){
                 int newY = currentPoint.second+dyList[i];
                 int newX = currentPoint.first+dxList[i];
-                if(newY <0 || newX <0 || newY > m-1 || newX > n-1){
+                if(newY <0 || newX <0 || newY >= m || newX >= n){
                     isExit = true;
                     break;
                 }
@@ -151,7 +151,6 @@ int main(){
             while(!currentPointdeq.empty() && !isFind && !isDone){
                 pair<int, int> currentPoint = currentPointdeq.front();
                 currentPointdeq.pop_front();
-
                 for(int i = 0; i <8; i++){
                     int newY = currentPoint.second+dyList[i];
                     int newX = currentPoint.first+dxList[i];
@@ -163,7 +162,7 @@ int main(){
                             isDone = true;
                             break;
                         }
-
+                        visitedForCheckingLand[newY][newX] = 1;
                         currentPointdeq.push_back(make_pair(newX,newY));
                     }
                     else if (map[newY][newX]==currentSize) {
