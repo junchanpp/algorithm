@@ -1,66 +1,40 @@
 #include <iostream>
 #include <vector>
-
+#include <utility>
+#include <queue>
+#include <algorithm>
 using namespace std;
 
-typedef struct Edge
-{
-    int parentNode;
-    int childNode;
-    int distance;
-} Edge;
+vector<pair<int, int> > edge[10001];//first: 자식 노드, second: 가중치
+int dis = 0;
+int N;
 
-int n;
-Edge edge[4];
-int maxNum = 0;
-
-int calculateDiameter(int node, int startIndex, int distance);
-
-int main()
-{
-    scanf("%d", &n);
-    for (int i = 0; i < n - 1; i++)
-    {
-        scanf("%d %d %d", &edge[i].parentNode, &edge[i].childNode, &edge[i].distance);
+int dfs(int n){
+    if(edge[n].empty()){return 0;}
+    priority_queue<int> pq;
+    for(int i = 0 ; i < edge[n].size(); i++){
+        pq.push(dfs(edge[n][i].first)+edge[n][i].second);
     }
-    calculateDiameter(1, 0, 0);
-    printf("%d", maxNum);
+    int max1 = pq.top();
+    if(pq.size()>=2){
+        pq.pop();
+        int max2 = pq.top();
+        if(dis < max1+max2)dis = max1+max2;
+    }else {
+        if(dis < max1)dis = max1;
+    }
+    return max1;
 }
 
-int calculateDiameter(int node, int startIndex, int distance)
-{
-    int nextStartIndex;
-    vector<int> distanceList;
-
-    for (nextStartIndex = startIndex; nextStartIndex < n && (node >= edge[nextStartIndex].parentNode); nextStartIndex++)
-    {
-        if (node == edge[nextStartIndex].parentNode)
-        {
-            int dis = calculateDiameter(edge[nextStartIndex].childNode, nextStartIndex, edge[nextStartIndex].distance);
-            distanceList.push_back(dis);
-        }
+int main(){
+    cin >> N;
+    for(int i = 0 ; i < N-1; i++){
+        int temp1, temp2, temp3;
+        cin >> temp1 >> temp2 >> temp3;
+        edge[temp1].push_back(make_pair(temp2,temp3));
     }
 
-    if (distanceList.empty())
-    {
-        return distance;
-    }
-    int maxDis = 0, max2Dis = 0;
-    for (int i = 0; i < distanceList.size(); i++)
-    {
-        if (maxDis < distanceList[i])
-        {
-            max2Dis = maxDis;
-            maxDis = distanceList[i];
-        }
-        else if (max2Dis < distanceList[i])
-        {
-            max2Dis = distanceList[i];
-        }
-    }
-    if (maxNum < maxDis + max2Dis)
-    {
-        maxNum = maxDis + max2Dis;
-    }
-    return maxDis + distance;
+    int answer = dfs(1);
+    
+    cout << dis;
 }

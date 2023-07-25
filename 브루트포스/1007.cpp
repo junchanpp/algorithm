@@ -2,63 +2,50 @@
 #include <utility>
 #include <vector>
 #include <math.h>
+#include <algorithm>
+#define INF 100000*100000+1;
 
 using namespace std;
 
-vector<pair<int,int> > point;
-bool isVisited[50];
-int N;
-
-double getDistance(pair<int,int>& a, pair<int,int>& b){
-    return sqrt(pow(a.first - b.first,2)+pow(a.second - b.second,2));
-}
-pair<int,int> getNewVector(pair<int,int>& a, pair<int,int>& b){
-    return make_pair(a.first+b.first,a.second+b.second);
-}
-
-pair<int,int> solve(int n){
-    if(n==2){
-        int pointList[2];
-        int index = 0;
-        for(int i = 0;i<N;i++){
-            if(isVisited[i]== false)pointList[index++] = i;
-        }
-        return getNewVector(point[pointList[0]],point[pointList[1]]);
-    }
-    int pointList[2];
-    int index = 0;
-    pair<int,int> minVector;
-    isAssign = false;
-    for(int i = 0;i<N;i++){
-        if(isVisited[i]== false){
-            if(index == 0){
-                isVisited[i] = true;
-                pointList[index++] = i;
-                continue;
-            }
-            isVisited[i] = true;
-            pair<int,int> currentVector = getNewVector(getNewVector(point[pointList[0]],point[i]),solve(n-2));
-            if(isAssign ==false || sum < getDistance(minVector)){minSum = sum;}
-            isVisited[i] = false;
-        }
-    }
-    isVisited[pointList[0]] = false;
-    return minSum;
-}
 
 int main(){
     int T;
     cin >> T;
     while(T--){
+        int N;
         cin >> N;
-        for(int i =0 ; i< N;i++){
-            int x,y;
-            cin >> x >> y;
-            point.push_back(make_pair(x,y));
+        vector<pair<int, int> > pointList;
+        vector<bool> temp(N,false);
+        for(int i = 0; i<N/2;i++){
+            temp[i] = true;
+        }
+        for(int i = 0; i <N;i++){
+            int temp1, temp2;
+            cin >> temp1 >> temp2;
+            pointList.push_back(make_pair(temp1,temp2));
         }
 
-        double answer = solve(N);
-        cout << answer << endl;
+        double distance = -1;
 
+        do{
+            int sumX = 0;
+            int sumY = 0;
+            for(int i = 0; i <N;i++){
+                if(temp[i]== true){
+                    sumX+=pointList[i].first;
+                    sumY+=pointList[i].second;
+                }else {
+                    sumX-=pointList[i].first;
+                    sumY-=pointList[i].second;
+                }
+            }
+            double nowDistance = sqrt(pow(sumX,2)+pow(sumY,2));
+            if(distance < 0 || nowDistance < distance)distance=nowDistance;
+        }while(prev_permutation(temp.begin(),temp.end()));
+
+        cout << fixed;
+        cout.precision(12);
+        cout << distance << endl;
     }
+    return 0;
 }

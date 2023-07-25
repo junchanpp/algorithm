@@ -1,105 +1,62 @@
-//2023-02-20 01:28:00 start
-
-
-#include<iostream>
-#include<vector>
-#include<deque>
-#include<string.h>
-#include<stack>
-#include <algorithm>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
-int n;
-vector<int>v[300];//커지는 경로밖에 없음
-vector<int>vReverse[300];// 작아지는 경로밖에 없음
-int distanceFor1[300];// 처음 1과의 거리
-stack<int>answer1;
+int N;
 
-bool isAfterN = false;
+bool edge[257][257]= {0,};
 
-int maxCount = 0;
-vector<int>answer;
+int memo[257][257];
 
-deque<int> deq;
-
-bool dfs(int node,int count, deque<int> dq){
-    bool isGetN = false;
-    if(node == 1 && count !=1){
-        if(count > maxCount){
-            deq.clear();
-            maxCount = count;
-            for(int i =0; i< dq.size();i++){
-                deq.push_back(dq[i]);
+int solve(int a, int b){
+    cout << a << " " << b<< endl;
+    if(a == b && a == N){
+        return 1;
+    }
+    if(memo[a][b] != -1){
+        return memo[a][b];
+    }
+    if(a > b){
+        int maxSize = 0;
+        for(int i = b+1 ; i <= N; i++){
+            if(edge[a][i] && (a!=i || a == N)){
+                int size = solve(a,i);
+                if(size > maxSize)maxSize = size;
             }
         }
-
-        return true;
-    }
-    if(isAfterN){
-        for(vector<int>::iterator iter = vReverse[node].begin(); iter != vReverse[node].end(); iter++){
-            int currentNode = *iter;
-
-            dq.push_front(currentNode);
-            bool result = dfs(currentNode,count+1,dq);
-            dq.pop_front();
-            if(result == false ){
-            }else {
-                isGetN = true;
+        return memo[a][b] = maxSize == 0 ? 0 : maxSize + 1;
+    }else {
+        int maxSize = 0;
+        for(int i = a+1 ; i <= N; i++){
+            if(edge[i][b] && (b!=i || b == N)){
+                int size = solve(i,b);
+                if(size > maxSize)maxSize = size;
             }
         }
-    }
-    else {
-        for(vector<int>::iterator iter = v[node].begin(); iter != v[node].end(); iter++){
-            int currentNode = *iter;
+        return memo[a][b] = maxSize == 0 ? 0 : maxSize + 1;
 
-            if(currentNode == n){
-                isAfterN = true;
-            }
-
-            vector<int> backupvReverse = vector<int>();
-            for(int i = 0; i < vReverse[currentNode].size();i++){
-                if(vReverse[currentNode][i]!= node)backupvReverse.push_back(vReverse[currentNode][i]);
-            }
-            swap(backupvReverse, vReverse[currentNode]);
-            dq.push_front(currentNode);
-            bool result = dfs(currentNode,count+1,dq);
-            dq.pop_front();
-            swap(backupvReverse, vReverse[currentNode]);
-            if(currentNode == n){isAfterN = false;}
-            if(result == false ){
-            } else {
-                isGetN = true;
-            }
-        }
     }
-    return isGetN;
 }
 
-int main(){z
-    cin >> n;
+int main(){
+    for(int i = 0; i < 257; i++){
+        for(int j = 0 ; j < 257; j++){
+            memo[i][j]= -1;
+        }
+    }
+    scanf("%d", &N);
 
-    int p,q;
     while(1){
-        cin >> p >> q;
-
-        if(p==0&&q==0)break;
-
-        v[p].push_back(q);
-        vReverse[q].push_back(p);
+        int temp1, temp2;
+        scanf("%d %d", &temp1, &temp2);
+        if(temp1 == temp2 && temp1 == 0)break;
+        edge[temp1][temp2] = 1;
+        edge[temp2][temp1] = 1;
     }
 
-    distanceFor1[1] = 1;
-    deque<int> dq;
-    dq.push_front(1);
-    dfs(1,distanceFor1[1],dq);
+    int ans = solve(1,1);
 
-    cout << maxCount << endl;
-
-    while(!deq.empty()){
-        cout << deq.front() << " " ;
-        deq.pop_front();
-    }
-
-
+    cout << ans << endl;
 }
+
