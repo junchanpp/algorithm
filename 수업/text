@@ -1,0 +1,20 @@
+global x = 5 ;
+
+func PL ( ) {
+  print(
+    bar ( h ) {
+        local x = 1 ;
+        return h ( 
+            f ( k ) {
+                k = k − 2;
+                return x + k;
+            }
+         ) + x ;
+    }
+    ( foo ( g ) {
+        local y = 2 + g( x )
+        print( y );
+        return y + x ;
+    } , 1 )
+    ) ;
+}
