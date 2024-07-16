@@ -13,9 +13,9 @@ int main(){
     int K;
     cin >> N >> K;
     vector<pair<int,int> > inputs(K);
-    vector<int> answers(K);
+    vector<int> answers;
 
-    for(int i = 0; i <K;i++){
+    for(int i = 0; i < K;i++){
         cin >> inputs[i].first >> inputs[i].second;
     }
 
@@ -25,15 +25,17 @@ int main(){
         int first = inputs[i].first;
         int second = inputs[i].second;
 
-        first = mid < first ? N - first : first;
-        second = mid < second ? N - second : second;
+        first = mid < first ? N - first + 1 : first;
+        second = mid < second ? N - second + 1 : second;
+
         int focusColor = (first < second ?  first : second) % 3;
+        focusColor = focusColor == 0 ? 3 : focusColor;
 
         answers.push_back(focusColor);
     }
 
     for(int i = 0 ; i < K ; i++){
-        cout << answers[i];
+        cout << answers[i] << '\n';
     }
 
 
