@@ -71,6 +71,9 @@ int solve2(int s, int e){
 }
 
 int main(){
+    cin.tie(0);
+    cout.tie(0);
+    ios_base::sync_with_stdio(0);
     cin >> N >> M >> X;//X로부터의 모든 점의 최단 거리. 다익스트라 문제 N^2;
     edges.assign(N, vector<pair<int,int> >(0));
     memo.assign(N,INT_MAX);
