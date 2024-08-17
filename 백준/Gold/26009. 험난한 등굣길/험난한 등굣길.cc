@@ -7,7 +7,7 @@
 using namespace std;
 
 int N, M, K;
-vector<vector<int> > map;
+vector<vector<bool> > map;
 
 int directionY[] = {-1,-1,1,1};
 int directionX[] = {-1,1,-1,1};
@@ -21,7 +21,7 @@ int main(){
     ios_base::sync_with_stdio(0);
 
     cin >> N >> M;
-    map.assign(N+1 , vector<int>(M+1,0));
+    map.assign(N+1 , vector<bool>(M+1,0));
     cin >> K;
     for(int i = 0; i < K; i++){
         int R, C, D;
