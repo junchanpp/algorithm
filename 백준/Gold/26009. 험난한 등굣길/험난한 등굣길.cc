@@ -40,11 +40,9 @@ int main(){
     }
 
     queue<pair<int, int> > q;
-    vector<vector<int> > visited;
-    visited.assign(N+1, vector<int>(M+1, 0));
 
     q.push(make_pair(1,1));
-    visited[1][1] = 1;
+    map[1][1] = 1;
     int count = 0;
 
     while(!q.empty()){
@@ -64,10 +62,10 @@ int main(){
                 if(nextY > N || nextY < 1 || nextX > M || nextX < 1){
                     continue;
                 }
-                if(map[nextY][nextX] || visited[nextY][nextX]){
+                if(map[nextY][nextX]){
                     continue;
                 }
-                visited[nextY][nextX] = 1;
+                map[nextY][nextX] = 1;
                 q.push(make_pair(nextY, nextX));
             }
         }
