@@ -1,11 +1,11 @@
 #include <iostream>
+#include <deque>
 #include <utility>
-#include <queue>
 #include <vector>
 
 using namespace std;
 
-priority_queue<pair<int, int> > pq;
+deque<pair<int, int> > dq;
 vector<int> D;
 int N, L;
 int main(){
@@ -17,11 +17,16 @@ int main(){
     for(int i = 0 ; i < N; i++){
         int input;
         cin >> input;
-        pq.push(make_pair(input * -1, i));
-        while(pq.top().second < i - L + 1){
-            pq.pop();
+        
+        
+        while(dq.size() && dq.back().first >= input){
+            dq.pop_back();
         }
-        D[i] = pq.top().first * -1;
+        dq.push_back(make_pair(input, i));
+        while(dq.front().second < i - L + 1){
+            dq.pop_front();
+        }
+        D[i] = dq.front().first;
     }
     for(int i = 0; i < N; i++){
         cout << D[i] << " ";
