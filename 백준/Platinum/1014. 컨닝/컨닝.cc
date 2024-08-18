@@ -4,7 +4,6 @@
 using namespace std;
 
 int N, M;
-vector<vector<int> > inputs;
 vector<int> bitmasks;
 int maxBitmask;
 vector<vector<int> > dp;//[i][j] i번째 줄, j만큼 비트마스킹
@@ -89,31 +88,28 @@ int main(){
     cin >> C;
     vector<int> answers;
     while(C--){
-        inputs.clear();
+
+        cin >> N >> M;
+
         dp.clear();
         bitmasks.clear();
-        cin >> N >> M;
-        inputs.assign(N, vector<int>(M, 0));
         dp.assign(N, vector<int>((1<<M), -1));
         bitmasks.assign(N, 0);
+        
+        maxBitmask = (1 << M) -1;
+
         for(int i = 0 ; i < N; i++){
             string s;
             cin >> s;
-            for(int j = 0; j < M; j++){
-                if(s[j] != '.'){inputs[i][j] = 1;}
-            }
-        }
-        for(int i = 0 ; i < N; i++){
             int bitmask = 0;
             for(int j = 0; j < M; j++){
-                if(inputs[i][j]){
+                if(s[j] != '.'){
                     bitmask |= 1 << j;
                 }
                 
             }
             bitmasks[i] = bitmask;
         }
-        maxBitmask = (1 << M) -1;
 
         answers.push_back(solve(N-1, bitmasks[N-1]));
     }
