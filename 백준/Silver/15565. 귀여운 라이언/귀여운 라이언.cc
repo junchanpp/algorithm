@@ -23,8 +23,6 @@ int main(){
     int i = 0;
     int j = 0;
     
-
-    //i는 0, j는 
     while(j < N){
         while(count < K && j < N){
             count += inputs[j++] ? 0 : 1;
